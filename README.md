@@ -1,7 +1,7 @@
 PyPsi
 =====
 
-A Python program for experimenting with psychic abilities.
+A Python program to aid psychic abilities experiments.
 
 ![Screenshot](https://i.imgur.com/5Xdnwp4.png)
 
@@ -13,7 +13,7 @@ pip install -r requirements.txt
 python -m pypsi
 ```
 
-Note: For Linux, you might need to install `python3-tk` or `python3-tkinter` before running
+*Note: Make sure you're using Python 3. If you're on Linux, you need to have `python3-tk` or `python3-tkinter` installed.*
 
 Adding a new entropy
 --------------------
