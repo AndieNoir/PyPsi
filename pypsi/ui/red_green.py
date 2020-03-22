@@ -26,7 +26,7 @@ class RedGreenGameFrame(tkinter.Frame):
     def __init__(self, parent, *args, **kwargs):
         tkinter.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
-        self.entropy_objects = [entropy_class() for entropy_class in config.ENTROPY_LIST]
+        self.entropy_objects = [entropy_class() for entropy_class in config.ENTROPY_CLASSES]
 
         self.parent.wm_title('Red/Green Game - PyPsi')
         self.parent.configure(background='black')
@@ -61,7 +61,7 @@ class RedGreenGameFrame(tkinter.Frame):
             selected_entropy = next(filter(lambda x: x.friendly_name == self.entropy_options_menu_variable.get(), self.entropy_objects))
             enable_bias_amplifier = self.amplifier_checkbutton_variable.get()
             trial_result = 0
-            random_bytes = selected_entropy.get_bytes_amplified(config.BITS_PER_TRIAL // 8) if enable_bias_amplifier else selected_entropy.get_bytes(config.BITS_PER_TRIAL // 8)
+            random_bytes = selected_entropy.get_bias_amplified_bytes(config.BITS_PER_TRIAL // 8) if enable_bias_amplifier else selected_entropy.get_bytes(config.BITS_PER_TRIAL // 8)
             for i in range(0, len(random_bytes)):
                 for k in range(0, 8 if i < len(random_bytes) - 1 else 7):  # use even bits to prevent a tie
                     trial_result += 0.5 if (random_bytes[i] >> k & 1 == 1) else -0.5

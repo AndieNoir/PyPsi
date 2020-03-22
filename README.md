@@ -34,7 +34,7 @@ Adding a new entropy
            return open('/dev/hwrng', 'rb').read(length)
     ```
 
-2.  Register the created class on `config.py`
+2.  Register the entropy class on `config.py`
 
     ```python
     # pypsi/config.py
@@ -42,7 +42,7 @@ Adding a new entropy
     from entropy.dev_hwrng import DevHwrng
     
     
-    ENTROPY_LIST = [
+    ENTROPY_CLASSES = [
        DevHwrng,
        # ...
     ]

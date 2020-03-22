@@ -26,13 +26,13 @@ class Entropy:
     def get_bytes(self, length):
         pass
 
-    def get_bytes_amplified(self, length):
+    def get_bias_amplified_bytes(self, length):
         amplified_bytes = []
         amplified_byte = 0
         bit_counter = 0
         while len(amplified_bytes) < length:
-            raw_bytes = self.get_bytes(length * 5)
-            for byte in raw_bytes:
+            unamplified_bytes = self.get_bytes(length * 5)
+            for byte in unamplified_bytes:
                 for k in range(0, 8, 2):
                     bit1 = byte >> k & 1
                     bit2 = byte >> k + 1 & 1

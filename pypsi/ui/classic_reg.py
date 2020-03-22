@@ -34,7 +34,7 @@ class ClassicRegExperimentFrame(tkinter.Frame):
     def __init__(self, parent, *args, **kwargs):
         tkinter.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
-        self.entropy_objects = sorted([entropy_class() for entropy_class in config.ENTROPY_LIST], key=lambda x: x.order)
+        self.entropy_objects = sorted([entropy_class() for entropy_class in config.ENTROPY_CLASSES], key=lambda x: x.order)
 
         self.parent.wm_title('Classic REG Experiment - PyPsi')
         self.parent.configure(background='black')
@@ -87,7 +87,7 @@ class ClassicRegExperimentFrame(tkinter.Frame):
             for _ in range(0, 100):
                 start_time = time.time()
                 trial_result = 0
-                random_bytes = selected_entropy.get_bytes_amplified(config.BITS_PER_TRIAL // 8) if enable_bias_amplifier else selected_entropy.get_bytes(config.BITS_PER_TRIAL // 8)
+                random_bytes = selected_entropy.get_bias_amplified_bytes(config.BITS_PER_TRIAL // 8) if enable_bias_amplifier else selected_entropy.get_bytes(config.BITS_PER_TRIAL // 8)
                 for byte in random_bytes:
                     for k in range(0, 8):
                         trial_result += 0.5 if (byte >> k & 1 == 1) else -0.5

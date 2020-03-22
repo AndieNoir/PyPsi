@@ -21,7 +21,7 @@ from pypsi.entropy.random_org import RandomOrg
 from pypsi.entropy.temporal import Temporal
 
 
-ENTROPY_LIST = [
+ENTROPY_CLASSES = [
     Anu,
     RandomOrg,
     Temporal,
