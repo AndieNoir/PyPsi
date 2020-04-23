@@ -27,9 +27,10 @@ class Entropy:
         pass
 
     def get_bias_amplified_bytes(self, length):
+        # Scott A. Wilber, "Machine-Enhanced Anomalous Cognition", 2006
         amplified_bytes = []
         amplified_byte = 0
-        bit_counter = 0
+        amplified_byte_set_bit_count = 0
         while len(amplified_bytes) < length:
             unamplified_bytes = self.get_bytes(length * 5)
             for byte in unamplified_bytes:
@@ -38,9 +39,9 @@ class Entropy:
                     bit2 = byte >> k + 1 & 1
                     if bit1 == bit2:
                         amplified_byte = amplified_byte << 1 | bit1
-                        bit_counter += 1
-                        if bit_counter == 8:
+                        amplified_byte_set_bit_count += 1
+                        if amplified_byte_set_bit_count == 8:
                             amplified_bytes.append(amplified_byte)
                             amplified_byte = 0
-                            bit_counter = 0
+                            amplified_byte_set_bit_count = 0
         return bytes(amplified_bytes[:length])
