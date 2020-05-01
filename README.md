@@ -13,7 +13,7 @@ pip install -r requirements.txt
 python -m pypsi
 ```
 
-*Note: Make sure you're using Python 3. If you're on Linux, you need to have `python3-tk` or `python3-tkinter` installed.*
+*Note: If you're on Linux, you need to have `python3-tk` or `python3-tkinter` installed.*
 
 Adding a new entropy
 --------------------
@@ -31,7 +31,8 @@ Adding a new entropy
     class DevHwrng(Entropy, friendly_name="/dev/hwrng", order=99):
     
        def get_bytes(self, length):
-           return open('/dev/hwrng', 'rb').read(length)
+           with open('/dev/hwrng', 'rb') as f:
+               return f.read(length)
     ```
 
 2.  Register the entropy class on `config.py`
