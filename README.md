@@ -40,7 +40,7 @@ Adding a new entropy
     ```python
     # pypsi/config.py
     
-    from entropy.dev_hwrng import DevHwrng
+    from pypsi.entropy.dev_hwrng import DevHwrng
     
     
     ENTROPY_CLASSES = [
