@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with PyPsi.  If not, see <https://www.gnu.org/licenses/>.
 
+import math
+
+from pypsi import config
+
 
 class Generator:
 
@@ -27,18 +31,19 @@ class Generator:
         pass
 
     def get_bias_amplified_bytes(self, length):
-        # Scott A. Wilber, "Machine-Enhanced Anomalous Cognition", 2006
+        # Scott A. Wilber, "Advances in Mind-Matter Interaction Technology: Is 100 Percent Effect Size Possible?", 2013
         amplified_bytes = []
         amplified_byte = 0
         amplified_byte_set_bit_count = 0
+        random_walk_deviation = 0
         while len(amplified_bytes) < length:
-            unamplified_bytes = self.get_bytes(length * 5)
+            unamplified_bytes = self.get_bytes(math.ceil(1.5 * length * (config.BIAS_AMPLIFICATION_FACTOR ** 2)))
             for byte in unamplified_bytes:
-                for k in range(0, 8, 2):
-                    bit1 = byte >> k & 1
-                    bit2 = byte >> k + 1 & 1
-                    if bit1 == bit2:
-                        amplified_byte = amplified_byte << 1 | bit1
+                for k in range(8):
+                    random_walk_deviation += 1 if (byte >> k & 1 == 1) else -1
+                    if random_walk_deviation == config.BIAS_AMPLIFICATION_FACTOR or random_walk_deviation == -config.BIAS_AMPLIFICATION_FACTOR:
+                        amplified_byte = amplified_byte << 1 | (1 if random_walk_deviation > 0 else 0)
+                        random_walk_deviation = 0
                         amplified_byte_set_bit_count += 1
                         if amplified_byte_set_bit_count == 8:
                             amplified_bytes.append(amplified_byte)
