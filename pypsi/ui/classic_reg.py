@@ -104,6 +104,7 @@ class ClassicRegExperimentFrame(tkinter.Frame):
             self.amplifier_checkbutton.configure(state=tkinter.NORMAL)
         else:
             self.start_reset_button.configure(text='Start')
+            self.z_score_label['text'] = 'Z-Score: +0.000'
             self.cumdev_x = [0]
             self.cumdev_y = [0]
             self.update_graph()
