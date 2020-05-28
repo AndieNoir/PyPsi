@@ -1,9 +1,10 @@
 PyPsi
 =====
 
-A Python program to aid psychic abilities experiments.
+A Python program that imitates [Psyleron Reflector](http://www.psyleron.com/software_reflector.html) to aid psychic
+abilities experiments.
 
-![Screenshot](https://i.imgur.com/5Xdnwp4.png)
+![Screenshot](https://i.imgur.com/tCTOjOk.png)
 
 Running
 -------
@@ -15,35 +16,35 @@ python -m pypsi
 
 *Note: If you're on Linux, you need to have `python3-tk` or `python3-tkinter` installed.*
 
-Adding a new entropy
---------------------
+Adding a new random number generator
+------------------------------------
 
-1.  Create a class that extends `Entropy` and override the `get_bytes` method
+1.  Create a class that extends `Generator` and override the `get_bytes` method
 
     Example:
 
     ```python
-    # pypsi/entropy/dev_hwrng.py
+    # pypsi/generator/dev_hwrng.py
     
-    from pypsi.entropy.base import Entropy
+    from pypsi.generator.base import Generator
     
     
-    class DevHwrng(Entropy, friendly_name="/dev/hwrng", order=99):
+    class DevHwrng(Generator, friendly_name="/dev/hwrng", order=99):
     
        def get_bytes(self, length):
            with open('/dev/hwrng', 'rb') as f:
                return f.read(length)
     ```
 
-2.  Register the entropy class on `config.py`
+2.  Register the generator class on `config.py`
 
     ```python
     # pypsi/config.py
     
-    from pypsi.entropy.dev_hwrng import DevHwrng
+    from pypsi.generator.dev_hwrng import DevHwrng
     
     
-    ENTROPY_CLASSES = [
+    GENERATOR_CLASSES = [
        DevHwrng,
        # ...
     ]

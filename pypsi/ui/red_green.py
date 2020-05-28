@@ -26,7 +26,7 @@ class RedGreenGameFrame(tkinter.Frame):
     def __init__(self, parent, *args, **kwargs):
         tkinter.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
-        self.entropy_objects = [entropy_class() for entropy_class in config.ENTROPY_CLASSES]
+        self.generator_objects = [generator_class() for generator_class in config.GENERATOR_CLASSES]
 
         self.parent.wm_title('Red/Green Game - PyPsi')
         self.parent.configure(background='black')
@@ -35,17 +35,17 @@ class RedGreenGameFrame(tkinter.Frame):
         self.rect_id = self.trial_result_canvas.create_rectangle(0, 0, 150, 150, outline='white', fill='black')
         self.trial_result_canvas.pack(side=tkinter.TOP, pady=(50, 0))
 
-        entropy_options_frame = tkinter.Frame(master=self.parent, bg='black')
-        entropy_options_frame.pack(side=tkinter.TOP, pady=(50, 0), padx=25)
+        generator_options_frame = tkinter.Frame(master=self.parent, bg='black')
+        generator_options_frame.pack(side=tkinter.TOP, pady=(50, 0), padx=25)
 
-        entropy_options_label = tkinter.Label(master=entropy_options_frame, text='Entropy:', bg='black', fg='white')
-        entropy_options_label.pack(side=tkinter.LEFT)
+        generator_options_label = tkinter.Label(master=generator_options_frame, text='Generator:', bg='black', fg='white')
+        generator_options_label.pack(side=tkinter.LEFT)
 
-        entropy_options = [entropy_object.friendly_name for entropy_object in sorted(self.entropy_objects, key=lambda x: x.order)]
-        self.entropy_options_menu_variable = tkinter.StringVar(self.parent, value=entropy_options[0])
-        self.entropy_options_menu = tkinter.OptionMenu(entropy_options_frame, self.entropy_options_menu_variable, *entropy_options)
-        self.entropy_options_menu.configure(width=30, highlightthickness=0)
-        self.entropy_options_menu.pack(side=tkinter.TOP, padx=(5, 0))
+        generator_options = [generator_object.friendly_name for generator_object in sorted(self.generator_objects, key=lambda x: x.order)]
+        self.generator_options_menu_variable = tkinter.StringVar(self.parent, value=generator_options[0])
+        self.generator_options_menu = tkinter.OptionMenu(generator_options_frame, self.generator_options_menu_variable, *generator_options)
+        self.generator_options_menu.configure(width=30, highlightthickness=0)
+        self.generator_options_menu.pack(side=tkinter.TOP, padx=(5, 0))
 
         self.amplifier_checkbutton_variable = tkinter.BooleanVar(master=self.parent, value=False)
         self.amplifier_checkbutton = tkinter.Checkbutton(master=self.parent, text='Enable bias amplifier', variable=self.amplifier_checkbutton_variable,
@@ -58,10 +58,10 @@ class RedGreenGameFrame(tkinter.Frame):
     def on_run_reset_button_click(self):
         if self.run_reset_button.cget('text') == 'Run':
             self.run_reset_button.configure(state=tkinter.DISABLED)
-            selected_entropy = next(filter(lambda x: x.friendly_name == self.entropy_options_menu_variable.get(), self.entropy_objects))
+            selected_generator = next(filter(lambda x: x.friendly_name == self.generator_options_menu_variable.get(), self.generator_objects))
             enable_bias_amplifier = self.amplifier_checkbutton_variable.get()
             trial_result = 0
-            random_bytes = selected_entropy.get_bias_amplified_bytes(config.BITS_PER_TRIAL // 8) if enable_bias_amplifier else selected_entropy.get_bytes(config.BITS_PER_TRIAL // 8)
+            random_bytes = selected_generator.get_bias_amplified_bytes(config.BITS_PER_TRIAL // 8) if enable_bias_amplifier else selected_generator.get_bytes(config.BITS_PER_TRIAL // 8)
             for i in range(0, len(random_bytes)):
                 for k in range(0, 8 if i < len(random_bytes) - 1 else 7):  # use even bits to prevent a tie
                     trial_result += 0.5 if (random_bytes[i] >> k & 1 == 1) else -0.5

@@ -16,7 +16,7 @@
 # along with PyPsi.  If not, see <https://www.gnu.org/licenses/>.
 
 
-class Entropy:
+class Generator:
 
     def __init_subclass__(cls, friendly_name, order, **kwargs):
         super().__init_subclass__(**kwargs)

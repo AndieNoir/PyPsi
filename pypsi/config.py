@@ -15,13 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with PyPsi.  If not, see <https://www.gnu.org/licenses/>.
 
-from pypsi.entropy.anu import Anu
-from pypsi.entropy.pseudo import Pseudo
-from pypsi.entropy.random_org import RandomOrg
-from pypsi.entropy.temporal import Temporal
+from pypsi.generator.anu import Anu
+from pypsi.generator.pseudo import Pseudo
+from pypsi.generator.random_org import RandomOrg
+from pypsi.generator.temporal import Temporal
 
 
-ENTROPY_CLASSES = [
+GENERATOR_CLASSES = [
     Anu,
     RandomOrg,
     Temporal,

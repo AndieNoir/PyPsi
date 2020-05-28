@@ -15,12 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with PyPsi.  If not, see <https://www.gnu.org/licenses/>.
 
-import requests
+import random
 
-from pypsi.entropy.base import Entropy
+from pypsi.generator.base import Generator
 
 
-class Temporal(Entropy, friendly_name="Gamblevore's TemporalLib", order=2):
+class Pseudo(Generator, friendly_name="Python's PRNG", order=4):
 
     def get_bytes(self, length):
-        return bytes.fromhex(requests.get('https://devapi.randonauts.com/entropy?size=%d&temporal=true&raw=true' % (length * 2)).json()['Entropy'])
+        return bytes([random.getrandbits(8) for _ in range(0, length)])

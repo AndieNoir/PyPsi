@@ -17,10 +17,10 @@
 
 import requests
 
-from pypsi.entropy.base import Entropy
+from pypsi.generator.base import Generator
 
 
-class Anu(Entropy, friendly_name="ANU's QRNG", order=0):
+class RandomOrg(Generator, friendly_name="Random.org", order=1):
 
     def get_bytes(self, length):
-        return bytes(requests.get('https://qrng.anu.edu.au/API/jsonI.php?length=%d&type=uint8' % length).json()['data'])
+        return requests.get('https://www.random.org/cgi-bin/randbyte?nbytes=%d&format=f' % length).content
