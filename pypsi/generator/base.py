@@ -22,6 +22,25 @@ from pypsi import config
 
 class Generator:
 
+    BIAS_AMPLIFICATION_LOOKUP_TABLE = [
+        -8, -6, -6, -4, -6, -4, -4, -2, -6, -4, -4, -2, -4, -2, -2,  0,
+        -6, -4, -4, -2, -4, -2, -2,  0, -4, -2, -2,  0, -2,  0,  0,  2,
+        -6, -4, -4, -2, -4, -2, -2,  0, -4, -2, -2,  0, -2,  0,  0,  2,
+        -4, -2, -2,  0, -2,  0,  0,  2, -2,  0,  0,  2,  0,  2,  2,  4,
+        -6, -4, -4, -2, -4, -2, -2,  0, -4, -2, -2,  0, -2,  0,  0,  2,
+        -4, -2, -2,  0, -2,  0,  0,  2, -2,  0,  0,  2,  0,  2,  2,  4,
+        -4, -2, -2,  0, -2,  0,  0,  2, -2,  0,  0,  2,  0,  2,  2,  4,
+        -2,  0,  0,  2,  0,  2,  2,  4,  0,  2,  2,  4,  2,  4,  4,  6,
+        -6, -4, -4, -2, -4, -2, -2,  0, -4, -2, -2,  0, -2,  0,  0,  2,
+        -4, -2, -2,  0, -2,  0,  0,  2, -2,  0,  0,  2,  0,  2,  2,  4,
+        -4, -2, -2,  0, -2,  0,  0,  2, -2,  0,  0,  2,  0,  2,  2,  4,
+        -2,  0,  0,  2,  0,  2,  2,  4,  0,  2,  2,  4,  2,  4,  4,  6,
+        -4, -2, -2,  0, -2,  0,  0,  2, -2,  0,  0,  2,  0,  2,  2,  4,
+        -2,  0,  0,  2,  0,  2,  2,  4,  0,  2,  2,  4,  2,  4,  4,  6,
+        -2,  0,  0,  2,  0,  2,  2,  4,  0,  2,  2,  4,  2,  4,  4,  6,
+         0,  2,  2,  4,  2,  4,  4,  6,  2,  4,  4,  6,  4,  6,  6,  8
+    ]
+
     def __init_subclass__(cls, friendly_name, order, **kwargs):
         super().__init_subclass__(**kwargs)
         cls.friendly_name = friendly_name
@@ -33,20 +52,19 @@ class Generator:
     def get_bias_amplified_bytes(self, length):
         # Scott A. Wilber, "Advances in Mind-Matter Interaction Technology: Is 100 Percent Effect Size Possible?", 2013
         amplified_bytes = []
-        amplified_byte = 0
-        amplified_byte_set_bit_count = 0
+        byte = 0
+        bit_counter = 0
         random_walk_deviation = 0
         while len(amplified_bytes) < length:
             unamplified_bytes = self.get_bytes(math.ceil(1.5 * length * (config.BIAS_AMPLIFICATION_FACTOR ** 2)))
-            for byte in unamplified_bytes:
-                for k in range(8):
-                    random_walk_deviation += 1 if (byte >> k & 1 == 1) else -1
-                    if random_walk_deviation == config.BIAS_AMPLIFICATION_FACTOR or random_walk_deviation == -config.BIAS_AMPLIFICATION_FACTOR:
-                        amplified_byte = amplified_byte << 1 | (1 if random_walk_deviation > 0 else 0)
-                        random_walk_deviation = 0
-                        amplified_byte_set_bit_count += 1
-                        if amplified_byte_set_bit_count == 8:
-                            amplified_bytes.append(amplified_byte)
-                            amplified_byte = 0
-                            amplified_byte_set_bit_count = 0
+            for i in range(len(unamplified_bytes)):
+                random_walk_deviation += Generator.BIAS_AMPLIFICATION_LOOKUP_TABLE[unamplified_bytes[i]]
+                while random_walk_deviation >= config.BIAS_AMPLIFICATION_FACTOR or random_walk_deviation <= -config.BIAS_AMPLIFICATION_FACTOR:
+                    byte = byte << 1 | (1 if random_walk_deviation > 0 else 0)
+                    random_walk_deviation %= config.BIAS_AMPLIFICATION_FACTOR
+                    bit_counter += 1
+                    if bit_counter == 8:
+                        amplified_bytes.append(byte)
+                        byte = 0
+                        bit_counter = 0
         return bytes(amplified_bytes[:length])
