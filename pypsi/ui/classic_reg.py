@@ -34,7 +34,11 @@ class ClassicRegExperimentFrame(tkinter.Frame):
     def __init__(self, parent, *args, **kwargs):
         tkinter.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
-        self.generator_objects = sorted([generator_class() for generator_class in config.GENERATOR_CLASSES], key=lambda x: x.order)
+
+        try:
+            self.generator_objects = sorted([generator_class() for generator_class in config.GENERATOR_CLASSES], key=lambda x: x.order)
+        except:
+            pass
 
         self.parent.wm_title('Classic REG Experiment - PyPsi')
         self.parent.configure(background='black')

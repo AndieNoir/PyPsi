@@ -15,19 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with PyPsi.  If not, see <https://www.gnu.org/licenses/>.
 
-from pypsi.generator.anu import Anu
-from pypsi.generator.comscire import ComScire
-from pypsi.generator.pseudo import Pseudo
-from pypsi.generator.random_org import RandomOrg
+import win32com.client
+
+from pypsi.generator.base import Generator
 
 
-GENERATOR_CLASSES = [
-    Anu,
-    RandomOrg,
-    Pseudo,
-    ComScire
-]
+class ComScire(Generator, friendly_name="ComScire QNG", order=3):
 
-BITS_PER_TRIAL = 200
+    def __init__(self):
+        self.qng = win32com.client.Dispatch('QWQNG.QNG')  # Windows only
 
-BIAS_AMPLIFICATION_FACTOR = 2
+    def get_bytes(self, length):
+        self.qng.Clear()
+        return self.qng.RandBytes(length)
