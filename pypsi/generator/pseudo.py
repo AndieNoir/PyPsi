@@ -20,7 +20,7 @@ import random
 from pypsi.generator.base import Generator
 
 
-class Pseudo(Generator, friendly_name="Python's PRNG", order=4):
+class Pseudo(Generator, friendly_name="Python's PRNG", order=2):
 
     def get_bytes(self, length):
         return bytes([random.getrandbits(8) for _ in range(0, length)])
