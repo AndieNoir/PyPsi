@@ -46,7 +46,7 @@ class Generator:
         cls.friendly_name = friendly_name
         cls.order = order
 
-    def get_bytes(self, length):
+    def get_bytes(self, length) -> bytes:
         pass
 
     def get_bias_amplified_bytes(self, length):
@@ -61,7 +61,7 @@ class Generator:
                 random_walk_deviation += Generator.BIAS_AMPLIFICATION_LOOKUP_TABLE[unamplified_bytes[i]]
                 while random_walk_deviation >= config.BIAS_AMPLIFICATION_FACTOR or random_walk_deviation <= -config.BIAS_AMPLIFICATION_FACTOR:
                     byte = byte << 1 | (1 if random_walk_deviation > 0 else 0)
-                    random_walk_deviation %= config.BIAS_AMPLIFICATION_FACTOR
+                    random_walk_deviation = (1 if random_walk_deviation > 0 else -1) * (abs(random_walk_deviation) % config.BIAS_AMPLIFICATION_FACTOR)
                     bit_counter += 1
                     if bit_counter == 8:
                         amplified_bytes.append(byte)
