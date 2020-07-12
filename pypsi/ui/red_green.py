@@ -17,6 +17,7 @@
 
 import threading
 import tkinter
+import traceback
 
 from pypsi import config
 
@@ -27,10 +28,13 @@ class RedGreenGameFrame(tkinter.Frame):
         tkinter.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
 
-        try:
-            self.generator_objects = sorted([generator_class() for generator_class in config.GENERATOR_CLASSES], key=lambda x: x.order)
-        except:
-            pass
+        self.generator_objects = []
+        for generator_class in config.GENERATOR_CLASSES:
+            try:
+                self.generator_objects.append(generator_class())
+            except:
+                traceback.print_exc()
+        self.generator_objects.sort(key=lambda x: x.order)
 
         self.parent.wm_title('Red/Green Game - PyPsi')
         self.parent.configure(background='black')
