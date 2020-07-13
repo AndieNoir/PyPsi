@@ -26,5 +26,14 @@ class ComScire(Generator, friendly_name="ComScire QNG", order=3):
         self.qng = win32com.client.Dispatch('QWQNG.QNG')  # Windows only
 
     def get_bytes(self, length):
-        self.qng.Clear()
-        return self.qng.RandBytes(length)
+        if length <= 8192:
+            self.qng.Clear()
+            return self.qng.RandBytes(length)
+        else:
+            self.qng.Clear()
+            data = bytearray()
+            for x in range(int(length / 8192)):
+                data.extend(bytearray(self.qng.RandBytes(8192)))
+            if length % 8192 != 0:
+                data.extend(bytearray(self.qng.RandBytes(length % 8192)))
+            return bytes(data)
