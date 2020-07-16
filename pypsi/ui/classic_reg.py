@@ -98,7 +98,7 @@ class ClassicRegExperimentFrame(tkinter.Frame):
                 random_bytes = selected_generator.get_bias_amplified_bytes(config.BITS_PER_TRIAL // 8) if enable_bias_amplifier else selected_generator.get_bytes(config.BITS_PER_TRIAL // 8)
                 for byte in random_bytes:
                     for k in range(0, 8):
-                        trial_result += 0.5 if (byte >> k & 1 == 1) else -0.5
+                        trial_result += 1 if (byte >> k & 1 == 1) else -1
                 self.cumdev_x.append(self.cumdev_x[-1] + 1)
                 self.cumdev_y.append(self.cumdev_y[-1] + trial_result)
                 self.update_graph()
@@ -120,11 +120,11 @@ class ClassicRegExperimentFrame(tkinter.Frame):
     def update_graph(self):
         self.plot.clear()
         self.plot.set_xlim(left=0, right=100)
-        self.plot.set_ylim(top=1.645 * math.sqrt(100 * config.BITS_PER_TRIAL), bottom=-1.645 * math.sqrt(100 * config.BITS_PER_TRIAL))
+        self.plot.set_ylim(top=2 * 1.645 * math.sqrt(100 * config.BITS_PER_TRIAL), bottom=-2 * 1.645 * math.sqrt(100 * config.BITS_PER_TRIAL))
         self.plot.set_xticks(np.arange(0, 100, 10))
         self.plot.set_yticks([])
-        self.plot.plot(np.arange(0, 100, 0.01), 1.645 * np.sqrt(np.arange(0, 100, 0.01) * config.BITS_PER_TRIAL) / 2, 'red')
-        self.plot.plot(np.arange(0, 100, 0.01), -1.645 * np.sqrt(np.arange(0, 100, 0.01) * config.BITS_PER_TRIAL) / 2, 'blue')
+        self.plot.plot(np.arange(0, 100, 0.01), 1.645 * np.sqrt(np.arange(0, 100, 0.01) * config.BITS_PER_TRIAL), 'red')
+        self.plot.plot(np.arange(0, 100, 0.01), -1.645 * np.sqrt(np.arange(0, 100, 0.01) * config.BITS_PER_TRIAL), 'blue')
         self.plot.plot(np.arange(0, 100, 0.01), 0 * np.arange(0, 100, 0.01), 'lime')
         self.plot.plot(self.cumdev_x, self.cumdev_y, 'white')
         self.canvas.draw()

@@ -72,7 +72,7 @@ class RedGreenGameFrame(tkinter.Frame):
             random_bytes = selected_generator.get_bias_amplified_bytes(config.BITS_PER_TRIAL // 8) if enable_bias_amplifier else selected_generator.get_bytes(config.BITS_PER_TRIAL // 8)
             for i in range(0, len(random_bytes)):
                 for k in range(0, 8 if i < len(random_bytes) - 1 else 7):  # use even bits to prevent a tie
-                    trial_result += 0.5 if (random_bytes[i] >> k & 1 == 1) else -0.5
+                    trial_result += 1 if (random_bytes[i] >> k & 1 == 1) else -1
             self.trial_result_canvas.itemconfig(self.rect_id, fill='lime' if trial_result > 0 else 'red')
             self.run_reset_button.configure(text='Reset')
             self.run_reset_button.configure(state=tkinter.NORMAL)
