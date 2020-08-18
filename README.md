@@ -10,8 +10,8 @@ Running
 -------
 
 ```bash
-pip install -r requirements.txt
-python -m pypsi
+pip3 install -r requirements.txt
+python3 -m pypsi
 ```
 
 *Note: If you're on Linux, you need to have `python3-tk` or `python3-tkinter` installed.*
